@@ -1,0 +1,684 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Microsoft 웨비나 추천 가이드</title>
+  <style>
+    :root {
+      --ms-blue: #0078d4;
+      --text: #172033;
+      --muted: #667085;
+      --line: #e5e7eb;
+      --bg: #f6f8fb;
+      --card: #ffffff;
+      --orange: #ff6a00;
+      --green: #107c10;
+      --purple: #7f3fbf;
+      --shadow-sm: 0 2px 8px rgba(16, 24, 40, 0.06);
+      --shadow-md: 0 14px 34px rgba(16, 24, 40, 0.14);
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: "Segoe UI", "Noto Sans KR", "Malgun Gothic", Arial, sans-serif;
+      color: var(--text);
+      background: var(--bg);
+      font-weight: 400;
+      word-break: keep-all;
+    }
+
+    a { color: inherit; }
+
+    .page-header {
+      height: 68px;
+      background: #fff;
+      border-bottom: 1px solid var(--line);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 48px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      font-size: 23px;
+      font-weight: 650;
+      letter-spacing: -0.03em;
+    }
+
+    .ms-mark {
+      width: 24px;
+      height: 24px;
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 3px;
+      flex: 0 0 auto;
+    }
+
+    .ms-mark span:nth-child(1) { background: #f25022; }
+    .ms-mark span:nth-child(2) { background: #7fba00; }
+    .ms-mark span:nth-child(3) { background: #00a4ef; }
+    .ms-mark span:nth-child(4) { background: #ffb900; }
+
+    .legend {
+      display: flex;
+      gap: 16px;
+      align-items: center;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .legend-item,
+    .category-label {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      white-space: nowrap;
+    }
+
+    .dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 999px;
+      background: var(--orange);
+      flex: 0 0 auto;
+    }
+    .dot.cloud { background: var(--green); }
+    .dot.security { background: var(--ms-blue); }
+
+    .hero {
+      position: relative;
+      overflow: hidden;
+      padding: 34px 48px 36px;
+      background:
+        radial-gradient(circle at 83% 42%, rgba(0,120,212,0.16), transparent 16%),
+        linear-gradient(135deg, #ffffff 0%, #f4f8ff 68%, #eef5ff 100%);
+      border-bottom: 1px solid #e9edf4;
+    }
+
+    .hero::after {
+      content: "";
+      position: absolute;
+      right: 60px;
+      top: 16px;
+      width: 300px;
+      height: 140px;
+      background:
+        repeating-radial-gradient(ellipse at center, rgba(0,120,212,0.16) 0 1px, transparent 2px 12px);
+      opacity: .55;
+      pointer-events: none;
+    }
+
+    .hero-inner { position: relative; z-index: 1; }
+
+    .hero h1 {
+      margin: 0 0 12px;
+      font-size: 32px;
+      line-height: 1.25;
+      font-weight: 720;
+      letter-spacing: -0.04em;
+    }
+
+    .hero p {
+      margin: 0;
+      color: #475467;
+      font-size: 16px;
+      line-height: 1.65;
+      font-weight: 430;
+    }
+
+    .wrap {
+      padding: 24px 48px 34px;
+    }
+
+    .matrix {
+      background: #fff;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      box-shadow: var(--shadow-sm);
+      overflow: hidden;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: 270px repeat(3, minmax(260px, 1fr));
+    }
+
+    .cell {
+      min-height: 168px;
+      border-right: 1px solid var(--line);
+      border-bottom: 1px solid var(--line);
+      padding: 22px 26px;
+    }
+
+    .cell:nth-child(4n) { border-right: 0; }
+    .grid > .cell:nth-last-child(-n+4) { border-bottom: 0; }
+
+    .head {
+      min-height: 76px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      background: rgba(255,255,255,.9);
+    }
+
+    .head:first-child {
+      justify-content: flex-start;
+      color: var(--ms-blue);
+      font-weight: 680;
+    }
+
+    .level-title {
+      font-size: 16px;
+      font-weight: 700;
+      line-height: 1.35;
+    }
+
+    .level-title span {
+      display: block;
+      margin-top: 3px;
+      font-size: 13px;
+      font-weight: 500;
+    }
+
+    .l100 { color: var(--green); }
+    .l200 { color: var(--orange); }
+    .l300 { color: var(--purple); }
+
+    .journey {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      height: 100%;
+      min-height: 180px;
+    }
+
+    .journey-icon {
+      width: 46px;
+      height: 46px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #0078d4, #005a9e);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 21px;
+      flex: 0 0 auto;
+      box-shadow: 0 8px 18px rgba(0,120,212,.22);
+    }
+
+    .journey h2 {
+      margin: 0 0 8px;
+      font-size: 17px;
+      line-height: 1.35;
+      font-weight: 680;
+      letter-spacing: -0.02em;
+    }
+
+    .journey p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.55;
+      font-weight: 420;
+    }
+
+    .session-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .session-card {
+      width: 100%;
+      text-align: left;
+      border: 1px solid #edf0f5;
+      background: var(--card);
+      border-radius: 11px;
+      padding: 14px 16px;
+      box-shadow: 0 1px 3px rgba(16, 24, 40, .04);
+      cursor: pointer;
+      transition: transform .15s ease, box-shadow .15s ease, border-color .15s ease;
+      font: inherit;
+      color: inherit;
+    }
+
+    .session-card:hover,
+    .session-card:focus-visible {
+      transform: translateY(-1px);
+      border-color: #cfe4f8;
+      box-shadow: 0 8px 18px rgba(16, 24, 40, .10);
+      outline: none;
+    }
+
+    .session-title-row {
+      display: grid;
+      grid-template-columns: 8px 1fr;
+      gap: 9px;
+      align-items: start;
+    }
+
+    .session-title {
+      font-size: 15px;
+      line-height: 1.43;
+      font-weight: 620;
+      letter-spacing: -0.02em;
+    }
+
+    .session-meta {
+      margin-top: 8px;
+      padding-left: 17px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px 8px;
+      align-items: center;
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 450;
+    }
+
+    .tag {
+      display: inline-flex;
+      align-items: center;
+      padding: 3px 8px;
+      border-radius: 999px;
+      background: #f2f4f7;
+      color: #475467;
+      font-size: 12px;
+      font-weight: 560;
+      line-height: 1.2;
+    }
+
+    .empty {
+      height: 100%;
+      min-height: 130px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      color: #98a2b3;
+      gap: 9px;
+      font-size: 13px;
+      font-weight: 520;
+    }
+
+    .empty-icon {
+      width: 26px;
+      height: 26px;
+      border: 1px solid #d0d5dd;
+      border-radius: 7px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #98a2b3;
+    }
+
+    .note {
+      color: #667085;
+      text-align: center;
+      font-size: 14px;
+      margin: 18px 0 0;
+    }
+
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(15, 23, 42, .42);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      z-index: 100;
+    }
+
+    .modal-backdrop.open { display: flex; }
+
+    .modal {
+      width: min(520px, 100%);
+      max-height: min(760px, calc(100vh - 48px));
+      overflow: auto;
+      background: #fff;
+      border-radius: 16px;
+      box-shadow: var(--shadow-md);
+      border: 1px solid rgba(255,255,255,.7);
+      padding: 28px;
+    }
+
+    .modal-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 18px;
+      margin-bottom: 14px;
+    }
+
+    .modal h3 {
+      margin: 14px 0 16px;
+      font-size: 22px;
+      line-height: 1.35;
+      font-weight: 720;
+      letter-spacing: -0.035em;
+    }
+
+    .close-btn {
+      border: 0;
+      background: transparent;
+      cursor: pointer;
+      font-size: 27px;
+      line-height: 1;
+      color: #344054;
+      padding: 0;
+    }
+
+    .modal-info {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-bottom: 20px;
+      color: #475467;
+      font-size: 14px;
+    }
+
+    .info-row {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+    }
+
+    .modal-desc {
+      border-top: 1px solid #eef2f6;
+      padding-top: 18px;
+      margin: 0 0 24px;
+      color: #475467;
+      font-size: 15px;
+      line-height: 1.75;
+      font-weight: 420;
+      white-space: pre-line;
+    }
+
+    .register-btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      min-height: 50px;
+      border-radius: 8px;
+      background: var(--ms-blue);
+      color: #fff;
+      text-decoration: none;
+      font-weight: 650;
+      box-shadow: 0 8px 18px rgba(0,120,212,.25);
+      transition: background .15s ease, transform .15s ease;
+    }
+
+    .register-btn:hover {
+      background: #006cbe;
+      transform: translateY(-1px);
+    }
+
+    .category-chip {
+      font-size: 12px;
+      font-weight: 680;
+      color: var(--orange);
+    }
+    .category-chip.cloud { color: var(--green); }
+    .category-chip.security { color: var(--ms-blue); }
+
+    @media (max-width: 1120px) {
+      .page-header { padding: 0 24px; }
+      .hero { padding: 30px 24px 32px; }
+      .wrap { padding: 22px 24px 30px; overflow-x: auto; }
+      .matrix { min-width: 980px; }
+    }
+
+    @media (max-width: 720px) {
+      .page-header {
+        height: auto;
+        align-items: flex-start;
+        flex-direction: column;
+        gap: 12px;
+        padding: 18px 20px;
+      }
+      .brand { font-size: 20px; }
+      .legend { flex-wrap: wrap; gap: 10px; }
+      .hero { padding: 28px 20px; }
+      .hero::after { display: none; }
+      .hero h1 { font-size: 27px; }
+      .wrap { padding: 18px 16px 28px; }
+      .modal { padding: 24px 20px; }
+    }
+  </style>
+</head>
+<body>
+  <header class="page-header">
+    <div class="brand" aria-label="Microsoft 웨비나 추천 가이드">
+      <div class="ms-mark" aria-hidden="true"><span></span><span></span><span></span><span></span></div>
+      <span>Microsoft 웨비나 추천 가이드</span>
+    </div>
+    <div class="legend" aria-label="카테고리 범례">
+      <span class="legend-item"><span class="dot"></span>Copilot</span>
+      <span class="legend-item"><span class="dot cloud"></span>Cloud &amp; AI</span>
+      <span class="legend-item"><span class="dot security"></span>Security</span>
+    </div>
+  </header>
+
+  <section class="hero">
+    <div class="hero-inner">
+      <h1>나에게 맞는 웨비나를 찾아보세요</h1>
+      <p>관심 분야와 원하는 단계에 맞는 웨비나를 확인하고 등록해보세요.</p>
+    </div>
+  </section>
+
+  <main class="wrap">
+    <section class="matrix" aria-label="웨비나 추천 표">
+      <div class="grid" id="webinarGrid"></div>
+    </section>
+    <p class="note">세션을 클릭하면 상세 설명과 등록 링크를 확인할 수 있습니다.</p>
+  </main>
+
+  <div class="modal-backdrop" id="modalBackdrop" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+    <article class="modal">
+      <div class="modal-top">
+        <div id="modalCategory" class="category-chip"></div>
+        <button class="close-btn" type="button" aria-label="닫기" id="modalClose">×</button>
+      </div>
+      <h3 id="modalTitle"></h3>
+      <div class="modal-info">
+        <div class="info-row" id="modalDate"></div>
+        <div class="info-row" id="modalAudience"></div>
+      </div>
+      <p class="modal-desc" id="modalDescription"></p>
+      <a class="register-btn" id="modalRegister" href="#" target="_blank" rel="noopener noreferrer">등록하기&nbsp;›</a>
+    </article>
+  </div>
+
+  <script>
+    const levels = [100, 200, 300];
+    const levelLabels = {
+      100: { title: 'Level 100', sub: '입문', className: 'l100' },
+      200: { title: 'Level 200', sub: '기본', className: 'l200' },
+      300: { title: 'Level 300', sub: '심화', className: 'l300' }
+    };
+
+    const journeyDetails = {
+      'AI 시작하기': {
+        icon: '✨',
+        description: 'AI와 Copilot을 이해하고 업무에 활용하는 첫 단계'
+      },
+      '업무에 쓰는 AI 에이전트': {
+        icon: '⚙️',
+        description: 'AI 에이전트를 활용한 업무 생산성 향상 방법'
+      },
+      '운영 및 관리하기': {
+        icon: '🛡️',
+        description: '보안, 거버넌스, 관리 체계를 구축하는 단계'
+      }
+    };
+
+    function getCategoryClass(category = '') {
+      const normalized = category.toLowerCase();
+      if (normalized.includes('cloud')) return 'cloud';
+      if (normalized.includes('security')) return 'security';
+      return '';
+    }
+
+    function createDot(category) {
+      const span = document.createElement('span');
+      span.className = `dot ${getCategoryClass(category)}`.trim();
+      return span;
+    }
+
+    function createEmptyCell() {
+      const empty = document.createElement('div');
+      empty.className = 'empty';
+      empty.innerHTML = '<span class="empty-icon">⌁</span><span>준비 중입니다.</span>';
+      return empty;
+    }
+
+    function openModal(session) {
+      const modalBackdrop = document.getElementById('modalBackdrop');
+      const modalCategory = document.getElementById('modalCategory');
+      const modalTitle = document.getElementById('modalTitle');
+      const modalDate = document.getElementById('modalDate');
+      const modalAudience = document.getElementById('modalAudience');
+      const modalDescription = document.getElementById('modalDescription');
+      const modalRegister = document.getElementById('modalRegister');
+
+      const categoryClass = getCategoryClass(session.category);
+      modalCategory.className = `category-chip ${categoryClass}`.trim();
+      modalCategory.innerHTML = `<span class="category-label">${createDotMarkup(session.category)}${session.category || 'Webinar'}</span>`;
+      modalTitle.textContent = session.title || '제목 없음';
+      modalDate.innerHTML = `📅 <span>${session.dateTime || '일정 미정'}</span>`;
+
+      const audiences = Array.isArray(session.targetAudiences) ? session.targetAudiences : [];
+      modalAudience.innerHTML = audiences.length
+        ? `👥 <span>${audiences.map(a => `<span class="tag">${escapeHtml(a)}</span>`).join(' ')}</span>`
+        : '';
+      modalAudience.style.display = audiences.length ? 'flex' : 'none';
+
+      modalDescription.textContent = session.description || '상세 설명이 준비 중입니다.';
+      modalRegister.href = session.registrationUrl || '#';
+      modalRegister.style.display = session.registrationUrl ? 'flex' : 'none';
+      modalBackdrop.classList.add('open');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeModal() {
+      document.getElementById('modalBackdrop').classList.remove('open');
+      document.body.style.overflow = '';
+    }
+
+    function createDotMarkup(category) {
+      return `<span class="dot ${getCategoryClass(category)}"></span>`;
+    }
+
+    function escapeHtml(value) {
+      return String(value)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#039;');
+    }
+
+    function renderGrid(sessions) {
+      const grid = document.getElementById('webinarGrid');
+      const journeys = [...new Set([
+        ...Object.keys(journeyDetails),
+        ...sessions.map(s => s.journey).filter(Boolean)
+      ])];
+
+      grid.innerHTML = '';
+
+      const firstHead = document.createElement('div');
+      firstHead.className = 'cell head';
+      firstHead.textContent = 'Customer Journey';
+      grid.appendChild(firstHead);
+
+      levels.forEach(level => {
+        const head = document.createElement('div');
+        head.className = 'cell head';
+        const info = levelLabels[level];
+        head.innerHTML = `<div class="level-title ${info.className}">${info.title}<span>${info.sub}</span></div>`;
+        grid.appendChild(head);
+      });
+
+      journeys.forEach(journey => {
+        const detail = journeyDetails[journey] || { icon: '📌', description: '관련 웨비나를 확인해보세요.' };
+        const journeyCell = document.createElement('div');
+        journeyCell.className = 'cell';
+        journeyCell.innerHTML = `
+          <div class="journey">
+            <div class="journey-icon" aria-hidden="true">${detail.icon}</div>
+            <div>
+              <h2>${escapeHtml(journey)}</h2>
+              <p>${escapeHtml(detail.description)}</p>
+            </div>
+          </div>
+        `;
+        grid.appendChild(journeyCell);
+
+        levels.forEach(level => {
+          const cell = document.createElement('div');
+          cell.className = 'cell';
+          const matched = sessions.filter(session => String(session.journey) === String(journey) && Number(session.level) === Number(level));
+
+          if (!matched.length) {
+            cell.appendChild(createEmptyCell());
+          } else {
+            const list = document.createElement('div');
+            list.className = 'session-list';
+            matched.forEach(session => {
+              const button = document.createElement('button');
+              button.type = 'button';
+              button.className = 'session-card';
+              const audiences = Array.isArray(session.targetAudiences) ? session.targetAudiences : [];
+              button.innerHTML = `
+                <div class="session-title-row">
+                  ${createDotMarkup(session.category)}
+                  <div class="session-title">${escapeHtml(session.title || '제목 없음')}</div>
+                </div>
+                <div class="session-meta">
+                  <span>${escapeHtml(session.dateTime || '일정 미정')}</span>
+                  ${audiences.map(a => `<span class="tag">${escapeHtml(a)}</span>`).join('')}
+                </div>
+              `;
+              button.addEventListener('click', () => openModal(session));
+              list.appendChild(button);
+            });
+            cell.appendChild(list);
+          }
+          grid.appendChild(cell);
+        });
+      });
+    }
+
+    async function init() {
+      try {
+        const response = await fetch('./webinar-sessions.json', { cache: 'no-store' });
+        if (!response.ok) throw new Error('JSON 파일을 불러오지 못했습니다.');
+        const sessions = await response.json();
+        renderGrid(Array.isArray(sessions) ? sessions : []);
+      } catch (error) {
+        document.getElementById('webinarGrid').innerHTML = '<div class="cell" style="grid-column:1 / -1; color:#b42318;">webinar-sessions.json 파일을 확인해주세요.</div>';
+        console.error(error);
+      }
+    }
+
+    document.getElementById('modalClose').addEventListener('click', closeModal);
+    document.getElementById('modalBackdrop').addEventListener('click', event => {
+      if (event.target.id === 'modalBackdrop') closeModal();
+    });
+    document.addEventListener('keydown', event => {
+      if (event.key === 'Escape') closeModal();
+    });
+
+    init();
+  </script>
+</body>
+</html>
