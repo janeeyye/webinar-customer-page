@@ -82,11 +82,12 @@
     }
 
     .dot {
-      width: 6px;
-      height: 6px;
+      width: 8px;
+      height: 8px;
       border-radius: 999px;
       background: var(--orange);
       flex: 0 0 auto;
+      margin-top: 0.45em;
     }
     .dot.cloud { background: var(--green); }
     .dot.security { background: var(--ms-blue); }
@@ -257,10 +258,9 @@
     }
 
     .session-title-row {
-      display: grid;
-      grid-template-columns: 8px 1fr;
+      display: flex;
+      align-items: flex-start;
       gap: 9px;
-      align-items: start;
     }
 
     .session-title {
