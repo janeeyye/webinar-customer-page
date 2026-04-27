@@ -277,9 +277,9 @@
       flex-wrap: wrap;
       gap: 6px 8px;
       align-items: center;
-      color: var(--muted);
-      font-size: 12px;
-      font-weight: 450;
+      color: #475467; 
+      font-size: 13px;
+      font-weight: 550;
     }
 
     .tag {
@@ -302,7 +302,7 @@
       align-items: center;
       justify-content: center;
       color: #98a2b3;
-      gap: 9px;
+      gap: 0px;
       font-size: 13px;
       font-weight: 520;
     }
@@ -431,7 +431,7 @@
 
     @media (max-width: 1120px) {
       .page-header { padding: 0 24px; }
-      .hero { padding: 30px 24px 32px; }
+      .hero { padding: 44px 48px 40px; }
       .wrap { padding: 22px 24px 30px; overflow-x: auto; }
       .matrix { min-width: 980px; }
     }
@@ -536,7 +536,7 @@
     function createEmptyCell() {
       const empty = document.createElement('div');
       empty.className = 'empty';
-      empty.innerHTML = '<span class="empty-icon">⌁</span><span>준비 중입니다.</span>';
+      empty.innerHTML = '<span>준비 중입니다.</span>';
       return empty;
     }
 
