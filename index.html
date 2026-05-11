@@ -89,6 +89,7 @@
       flex: 0 0 auto;
       margin-top: 0.45em;
     }
+
     .dot.cloud { background: var(--green); }
     .dot.security { background: var(--ms-blue); }
 
@@ -236,13 +237,12 @@
     }
 
     .session-card {
-      position: relative;
       width: 100%;
       text-align: left;
       border: 1px solid #edf0f5;
       background: var(--card);
       border-radius: 11px;
-      padding: 14px 74px 14px 16px;
+      padding: 14px 16px;
       box-shadow: 0 1px 3px rgba(16, 24, 40, .04);
       cursor: pointer;
       transition: transform .15s ease, box-shadow .15s ease, border-color .15s ease;
@@ -256,20 +256,6 @@
       border-color: #cfe4f8;
       box-shadow: 0 8px 18px rgba(16, 24, 40, .10);
       outline: none;
-    }
-
-    .replay-badge {
-      position: absolute;
-      top: 12px;
-      right: 14px;
-      padding: 3px 8px;
-      border-radius: 999px;
-      background: #eef6ff;
-      color: #0078d4;
-      font-size: 11px;
-      font-weight: 650;
-      line-height: 1.2;
-      white-space: nowrap;
     }
 
     .session-title-row {
@@ -292,9 +278,14 @@
       flex-wrap: wrap;
       gap: 6px 8px;
       align-items: center;
-      color: #475467; 
+      color: #475467;
       font-size: 13px;
       font-weight: 550;
+    }
+
+    .replay-text {
+      color: var(--ms-blue);
+      font-weight: 700;
     }
 
     .tag {
@@ -441,6 +432,7 @@
       font-weight: 680;
       color: var(--orange);
     }
+
     .category-chip.cloud { color: var(--green); }
     .category-chip.security { color: var(--ms-blue); }
 
@@ -459,6 +451,7 @@
         gap: 12px;
         padding: 18px 20px;
       }
+
       .brand { font-size: 20px; }
       .legend { flex-wrap: wrap; gap: 10px; }
       .hero { padding: 28px 20px; }
@@ -514,6 +507,7 @@
 
   <script>
     const levels = [100, 200, 300];
+
     const levelLabels = {
       100: { title: 'Level 100', sub: '입문', className: 'l100' },
       200: { title: 'Level 200', sub: '기본', className: 'l200' },
@@ -542,12 +536,6 @@
       return '';
     }
 
-    function createDot(category) {
-      const span = document.createElement('span');
-      span.className = `dot ${getCategoryClass(category)}`.trim();
-      return span;
-    }
-
     function createEmptyCell() {
       const empty = document.createElement('div');
       empty.className = 'empty';
@@ -574,6 +562,7 @@
       const modalRegister = document.getElementById('modalRegister');
 
       const categoryClass = getCategoryClass(session.category);
+
       modalCategory.className = `category-chip ${categoryClass}`.trim();
       modalCategory.innerHTML = `<span class="category-label">${createDotMarkup(session.category)}${session.category || 'Webinar'}</span>`;
       modalTitle.textContent = session.title || '제목 없음';
@@ -655,34 +644,46 @@
         levels.forEach(level => {
           const cell = document.createElement('div');
           cell.className = 'cell';
-          const matched = sessions.filter(session => String(session.journey) === String(journey) && Number(session.level) === Number(level));
+          const matched = sessions.filter(session =>
+            String(session.journey) === String(journey) &&
+            Number(session.level) === Number(level)
+          );
 
           if (!matched.length) {
             cell.appendChild(createEmptyCell());
           } else {
             const list = document.createElement('div');
             list.className = 'session-list';
+
             matched.forEach(session => {
               const button = document.createElement('button');
               button.type = 'button';
               button.className = 'session-card';
+
               const audiences = Array.isArray(session.targetAudiences) ? session.targetAudiences : [];
+              const pastEvent = isPastEvent(session.eventDate);
+              const dateOrReplay = pastEvent
+                ? '<span class="replay-text">다시보기</span>'
+                : `<span>${escapeHtml(session.dateTime || '일정 미정')}</span>`;
+
               button.innerHTML = `
-                ${isPastEvent(session.eventDate) ? '<span class="replay-badge">다시보기</span>' : ''}
                 <div class="session-title-row">
                   ${createDotMarkup(session.category)}
                   <div class="session-title">${escapeHtml(session.title || '제목 없음')}</div>
                 </div>
                 <div class="session-meta">
-                  <span>${escapeHtml(session.dateTime || '일정 미정')}</span>
+                  ${dateOrReplay}
                   ${audiences.map(a => `<span class="tag">${escapeHtml(a)}</span>`).join('')}
                 </div>
               `;
+
               button.addEventListener('click', () => openModal(session));
               list.appendChild(button);
             });
+
             cell.appendChild(list);
           }
+
           grid.appendChild(cell);
         });
       });
@@ -701,9 +702,11 @@
     }
 
     document.getElementById('modalClose').addEventListener('click', closeModal);
+
     document.getElementById('modalBackdrop').addEventListener('click', event => {
       if (event.target.id === 'modalBackdrop') closeModal();
     });
+
     document.addEventListener('keydown', event => {
       if (event.key === 'Escape') closeModal();
     });
