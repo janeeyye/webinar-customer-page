@@ -567,13 +567,16 @@
       const modalAudience = document.getElementById('modalAudience');
       const modalDescription = document.getElementById('modalDescription');
       const modalRegister = document.getElementById('modalRegister');
+      const pastEvent = isPastEvent(session.eventDate);
 
       const categoryClass = getCategoryClass(session.category);
 
       modalCategory.className = `category-chip ${categoryClass}`.trim();
       modalCategory.innerHTML = `<span class="category-label">${createDotMarkup(session.category)}${session.category || 'Webinar'}</span>`;
       modalTitle.textContent = session.title || '제목 없음';
-      modalDate.innerHTML = `📅 <span>${session.dateTime || '일정 미정'}</span>`;
+      modalDate.innerHTML = pastEvent
+        ? `<span class="replay-text">다시보기</span>`
+        : `📅 <span>${session.dateTime || '일정 미정'}</span>`;
 
       const audiences = Array.isArray(session.targetAudiences) ? session.targetAudiences : [];
       modalAudience.innerHTML = audiences.length
