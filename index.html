@@ -286,14 +286,33 @@
     .replay-text {
   display: inline-flex;
   align-items: center;
-  padding: 3px 8px;
-  border-radius: 999px;
-  background: #eaf4ff;
+  gap: 6px;
   color: var(--ms-blue);
-  font-size: 12px;
+  font-size: 13px;
   font-weight: 700;
   line-height: 1.2;
-}
+      }
+
+    .replay-text::before {
+      content: "";
+      width: 3px;
+      height: 14px;
+      border-radius: 999px;
+      background: var(--ms-blue);
+      flex: 0 0 auto;
+      }
+
+    .modal-replay-badge {
+      display: inline-flex;
+      align-items: center;
+      padding: 3px 8px;
+      border-radius: 999px;
+      background: #eaf4ff;
+      color: var(--ms-blue);
+      font-size: 12px;
+      font-weight: 700;
+      line-height: 1.2;
+    }
 
     .tag {
       display: inline-flex;
@@ -435,6 +454,9 @@
     }
 
     .category-chip {
+      display: flex;
+      align-items: center;
+      gap: 8px;
       font-size: 12px;
       font-weight: 680;
       color: var(--orange);
@@ -572,11 +594,13 @@
       const categoryClass = getCategoryClass(session.category);
 
       modalCategory.className = `category-chip ${categoryClass}`.trim();
-      modalCategory.innerHTML = `<span class="category-label">${createDotMarkup(session.category)}${session.category || 'Webinar'}</span>`;
+      modalCategory.innerHTML = `
+        <span class="category-label">${createDotMarkup(session.category)}${session.category || 'Webinar'}</span>
+        ${pastEvent ? '<span class="modal-replay-badge">다시보기</span>' : ''}
+      `;
+
       modalTitle.textContent = session.title || '제목 없음';
-      modalDate.innerHTML = pastEvent
-        ? `<span class="replay-text">다시보기</span>`
-        : `📅 <span>${session.dateTime || '일정 미정'}</span>`;
+      modalDate.innerHTML = `📅 <span>${session.dateTime || '일정 미정'}</span>`;
 
       const audiences = Array.isArray(session.targetAudiences) ? session.targetAudiences : [];
       modalAudience.innerHTML = audiences.length
@@ -587,7 +611,7 @@
       modalDescription.textContent = session.description || '상세 설명이 준비 중입니다.';
 
       modalRegister.href = session.registrationUrl || '#';
-      modalRegister.textContent = isPastEvent(session.eventDate)
+      modalRegister.textContent = pastEvent
         ? '다시보기 바로가기 ›'
         : '지금 등록하기 ›';
       modalRegister.style.display = session.registrationUrl ? 'flex' : 'none';
