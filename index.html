@@ -236,12 +236,13 @@
     }
 
     .session-card {
+      position: relative;
       width: 100%;
       text-align: left;
       border: 1px solid #edf0f5;
       background: var(--card);
       border-radius: 11px;
-      padding: 14px 16px;
+      padding: 14px 74px 14px 16px;
       box-shadow: 0 1px 3px rgba(16, 24, 40, .04);
       cursor: pointer;
       transition: transform .15s ease, box-shadow .15s ease, border-color .15s ease;
@@ -255,6 +256,20 @@
       border-color: #cfe4f8;
       box-shadow: 0 8px 18px rgba(16, 24, 40, .10);
       outline: none;
+    }
+
+    .replay-badge {
+      position: absolute;
+      top: 12px;
+      right: 14px;
+      padding: 3px 8px;
+      border-radius: 999px;
+      background: #eef6ff;
+      color: #0078d4;
+      font-size: 11px;
+      font-weight: 650;
+      line-height: 1.2;
+      white-space: nowrap;
     }
 
     .session-title-row {
@@ -493,7 +508,7 @@
         <div class="info-row" id="modalAudience"></div>
       </div>
       <p class="modal-desc" id="modalDescription"></p>
-      <a class="register-btn" id="modalRegister" href="#" target="_blank" rel="noopener noreferrer">등록하기&nbsp;›</a>
+      <a class="register-btn" id="modalRegister" href="#" target="_blank" rel="noopener noreferrer">지금 등록하기&nbsp;›</a>
     </article>
   </div>
 
@@ -540,6 +555,15 @@
       return empty;
     }
 
+    function isPastEvent(eventDate) {
+      if (!eventDate) return false;
+
+      const eventEndDate = new Date(`${eventDate}T23:59:59+09:00`);
+      const now = new Date();
+
+      return now > eventEndDate;
+    }
+
     function openModal(session) {
       const modalBackdrop = document.getElementById('modalBackdrop');
       const modalCategory = document.getElementById('modalCategory');
@@ -562,8 +586,13 @@
       modalAudience.style.display = audiences.length ? 'flex' : 'none';
 
       modalDescription.textContent = session.description || '상세 설명이 준비 중입니다.';
+
       modalRegister.href = session.registrationUrl || '#';
+      modalRegister.textContent = isPastEvent(session.eventDate)
+        ? '다시보기 바로가기 ›'
+        : '지금 등록하기 ›';
       modalRegister.style.display = session.registrationUrl ? 'flex' : 'none';
+
       modalBackdrop.classList.add('open');
       document.body.style.overflow = 'hidden';
     }
@@ -639,6 +668,7 @@
               button.className = 'session-card';
               const audiences = Array.isArray(session.targetAudiences) ? session.targetAudiences : [];
               button.innerHTML = `
+                ${isPastEvent(session.eventDate) ? '<span class="replay-badge">다시보기</span>' : ''}
                 <div class="session-title-row">
                   ${createDotMarkup(session.category)}
                   <div class="session-title">${escapeHtml(session.title || '제목 없음')}</div>
