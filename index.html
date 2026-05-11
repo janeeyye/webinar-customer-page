@@ -284,22 +284,23 @@
     }
 
     .replay-text {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  color: var(--ms-blue);
-  font-size: 13px;
-  font-weight: 700;
-  line-height: 1.2;
+      display: inline-flex;
+      align-items: center;
+      color: var(--ms-blue);
+      font-size: 13px;
+      font-weight: 700;
+      line-height: 1.2;
       }
 
     .replay-text::before {
-      content: "";
-      width: 3px;
-      height: 14px;
-      border-radius: 999px;
-      background: var(--ms-blue);
-      flex: 0 0 auto;
+      content: none;
+      }
+
+    .replay-text::after {
+      content: "·";
+      margin-left: 8px;
+      color: #d0d5dd;
+      font-weight: 700;
       }
 
     .modal-replay-badge {
